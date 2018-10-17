@@ -23,6 +23,8 @@ $(GIT_HOOKS):
 	@scripts/install-git-hooks
 	@echo
 
+PNG = *.png
+
 OBJS_LIB = \
     tst.o bloom.o
 
@@ -49,6 +51,12 @@ test:  $(TESTS)
 	perf stat --repeat 100 \
                 -e cache-misses,cache-references,instructions,cycles \
 				./test_ref --bench $(TEST_DATA)
+	gnuplot scripts/runtime.gp
+
+plot:  
+	./test_cpy --bench
+	./test_ref --bench
+	gnuplot scripts/runtimept.gp
 
 bench: $(TESTS)
 	@for test in $(TESTS); do\
@@ -57,7 +65,7 @@ bench: $(TESTS)
 
 clean:
 	$(RM) $(TESTS) $(OBJS)
-	$(RM) $(deps)
+	$(RM) $(deps) $(PNG)
 	rm -f  bench_cpy.txt bench_ref.txt ref.txt cpy.txt caculate
 
 -include $(deps)

@@ -59,10 +59,16 @@ int main(int argc, char **argv)
         return stat;
     }
 
+    int count = 0;
+    double temp;
     FILE *output;
-    output = fopen("cpy.txt", "a");
+    output = fopen("cpy.txt", "a+");
     if (output != NULL) {
-        fprintf(output, "%.6f\n", t2 - t1);
+        while (fscanf(output, "%d %lf", &count, &temp) != EOF) {
+        }
+        fflush(output);
+        count++;
+        fprintf(output, "%d %.6f\n", count, t2 - t1);
         fclose(output);
     } else
         printf("open file error\n");

@@ -1,12 +1,12 @@
-reset                                                                           
+reset
+set xlabel 'test_number'
 set ylabel 'time(sec)'
-set style fill solid
-set key center top 
-set title 'perfomance comparison'
+set title 'performance comparison of ref/cpy build time'
 set term png enhanced font 'Verdana,10'
 set output 'runtime.png'
+set format x "%10.0f"
+set xtic 1200
+set xtics rotate by 45 right
 
-plot [:][y=0:0.250]'output.txt' using 2:xtic(1) with histogram title 'cpy', \
-'' using 3:xtic(1) with histogram title 'ref' , \
-'' using ($0-0.500):(0.110):2 with labels title ' ' textcolor lt 1, \
-'' using ($0-0.500):(0.120):3 with labels title ' ' textcolor lt 2,
+plot [:105][:1]'cpy.txt' using 1:2 with points title 'cpy',\
+'ref.txt' using 1:2 with points title 'ref',\

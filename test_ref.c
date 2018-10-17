@@ -68,6 +68,26 @@ int main(int argc, char **argv)
     fclose(fp);
     printf("ternary_tree, loaded %d words in %.6f sec\n", idx, t2 - t1);
 
+    if (argc == 2 && strcmp(argv[1], "--bench") == 0) {
+        int stat = bench_test(root, BENCH_TEST_FILE, LMAX);
+        tst_free(root);
+        return stat;
+    }
+
+    int count = 0;
+    double temp;
+    FILE *output;
+    output = fopen("ref.txt", "a+");
+    if (output != NULL) {
+        while (fscanf(output, "%d %lf", &count, &temp) != EOF) {
+        }
+        fflush(output);
+        count++;
+        fprintf(output, "%d %.6f\n", count, t2 - t1);
+        fclose(output);
+    } else
+        printf("open file error\n");
+
     for (;;) {
         char *p;
         printf(

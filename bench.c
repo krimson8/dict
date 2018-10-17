@@ -22,13 +22,16 @@ double tvgetf()
 
 int bench_test(const tst_node *root, char *out_file, const int max)
 {
-    char prefix[3] = "";
+    char prefix[4] = "";
     char word[WORDMAX] = "";
     char **sgl;
     FILE *fp = fopen(out_file, "w");
     FILE *dict = fopen(DICT_FILE, "r");
     int idx = 0, sidx = 0;
     double t1, t2;
+    double largest = 0.0;
+    int largest_idx;
+    double t;
 
     if (!fp || !dict) {
         if (fp) {
@@ -50,9 +53,16 @@ int bench_test(const tst_node *root, char *out_file, const int max)
         t1 = tvgetf();
         tst_search_prefix(root, prefix, sgl, &sidx, max);
         t2 = tvgetf();
-        fprintf(fp, "%d %f sec\n", idx, (t2 - t1) * 1000000);
+        t = (t2 - t1) * 1000;
+        if (t > largest) {
+            largest = t;
+            largest_idx = idx;
+        }
+        fprintf(fp, "%d %f nsec -- %s\n", idx, (t2 - t1) * 1000, *sgl);
+        // fprintf(fp, "%d %f msec\n", idx, (t2 - t1) * 1000);
         idx++;
     }
+    printf("Largest time consumed :%d--%f\n", largest_idx, largest);
 
     fclose(fp);
     fclose(dict);
